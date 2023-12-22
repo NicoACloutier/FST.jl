@@ -7,10 +7,10 @@ struct Node
 end
 
 """
-A finite-state automaton.
+A finite-state automaton. The first node should contain an empty string and point to the real first node.
 """
 struct FSAutomaton
-    starter::Node #the first node
+    starter::Node # the first node
 end
 
 """
@@ -50,7 +50,7 @@ function recognize(patterns::Vector{String}, machine::FSAutomaton)::Bool
         elseif ismissing(next)
             return false
         end
-        current_node = current_node.next[i]
+        current_node = current_node.next[next]
     end
     map(isnothing, current_node.next) |> any
 end
@@ -66,9 +66,9 @@ Returns:
 function generate(machine::FSAutomaton)::Vector{String}
     pattern::Vector{String} = []
     current_node = machine.starter
-    while !isnothing(current_node.next)
+    while !isnothing(current_node)
         push!(pattern, current_node.pattern)
         current_node = current_node.next[1]
     end
-    pattern
+    pattern[2:end]
 end
