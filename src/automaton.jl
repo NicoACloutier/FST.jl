@@ -18,6 +18,11 @@ end
 
 """
 Find a vector of integer IDs for possible next nodes given a node and a finite-state automaton.
+Arguments:
+    `machine::FSAutomaton`: the finite-state automaton.
+    `node::Int`: the node to find the next nodes of.
+Returns:
+    `::Vector{Arc}`: a vector of arcs originating at the node in question.
 """
 function next(machine::FSAutomaton, node::Int)::Vector{Arc}
     filter(arc -> arc.origin == node, machine.arcs)
@@ -25,6 +30,9 @@ end
 
 """
 Recognize a vector of string patterns utilizing a finite-state automaton, return whether recognized.
+Arguments:
+    `patterns::Vector{String}`: the vector of string patterns to check against.
+    `machine::FSAutomaton`: the finite-state machine.
 """
 function recognize(patterns::Vector{String}, machine::FSAutomaton)::Bool
     current_node = machine.starter
@@ -41,6 +49,10 @@ end
 """
 Generate a string pattern using a finite-state automaton.
     Not guaranteed to stop.
+Arguments:
+    `machine::FSAutomaton`: the finite-state automaton.
+Returns:
+    `::Vector{String}`: the generated string pattern.
 """
 function generate(machine::FSAutomaton)::Vector{String}
     pattern::Vector{String} = []
