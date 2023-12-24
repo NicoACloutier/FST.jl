@@ -33,6 +33,8 @@ Recognize a vector of string patterns utilizing a finite-state automaton, return
 Arguments:
     `patterns::Vector{String}`: the vector of string patterns to check against.
     `machine::FSAutomaton`: the finite-state machine.
+Returns:
+    `::Bool`: whether the patterns were recognized.
 """
 function recognize(patterns::Vector{String}, machine::FSAutomaton)::Bool
     current_node = machine.starter
