@@ -2,10 +2,9 @@
 A translating arc between two nodes in a finite-state transducer.
 """
 struct TransArc
-    origin::Int         # the origin node
-    destination::Int    # the destination node
-    pattern::String     # the arc pattern
-    translation::String # the pattern replacement
+    origin::Int                        # the origin node
+    destination::Int                   # the destination node
+    translations::Dict{String, String} # the translation patterns
 end
 
 """
@@ -41,12 +40,12 @@ function translate(patterns::Vector{String}, machine::FSTransducer)::Vector{Stri
     current_node = machine.starter
     translation::Vector{String} = []
     for (i, pattern) in enumerate(patterns)
-        potentials = filter(arc -> arc.pattern == pattern, next(machine, current_node))
+        potentials = filter(arc -> in(pattern, keys(arc.translations)), next(machine, current_node))
         if length(potentials) == 0
             return translation
         end
         current_node = potentials[1].destination
-        push!(translation, potentials[1].translation)
+        push!(translation, potentials[1].translations[pattern])
     end
     translation
 end
