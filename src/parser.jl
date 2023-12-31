@@ -2,9 +2,9 @@
 A finite-state parser.
 """
 struct FSParser
-    starter::Int      # the first node
-    final::Int        # the final node
-    arcs::Vector{Arc} # connections between nodes
+    starter::Int        # the first node
+    finals::Vector{Int} # the final nodes
+    arcs::Vector{Arc}   # connections between nodes
 end
 
 """
@@ -15,7 +15,7 @@ Returns:
     `::FSParser`: the converted finite-state parser.
 """
 function parser(automaton::FSAutomaton)
-    FSParser(automaton.starter, automaton.final, automaton.arcs)
+    FSParser(automaton.starter, automaton.finals, automaton.arcs)
 end
 
 """
@@ -51,7 +51,7 @@ function recognize(patterns::Vector{String}, machine::FSParser)::Tuple{Bool, Vec
         current_node = potentials[1].destination
         push!(path, current_node)
     end
-    ends = filter(arc -> arc.pattern == patterns[end] && arc.destination == machine.final, next(machine, current_node))
+    ends = filter(arc -> arc.pattern == patterns[end] && in(arc.destination, machine.finals), next(machine, current_node))
     found = length(ends) >= 1
     (found, found ? vcat(path, [ends[1].destination]) : [])
 end

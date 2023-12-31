@@ -11,9 +11,9 @@ end
 A finite-state automaton.
 """
 struct FSAutomaton
-    starter::Int      # the first node
-    final::Int        # the final node
-    arcs::Vector{Arc} # connections between nodes
+    starter::Int        # the first node
+    finals::Vector{Int} # the final nodes
+    arcs::Vector{Arc}   # connections between nodes
 end
 
 """
@@ -45,7 +45,7 @@ function recognize(patterns::Vector{String}, machine::FSAutomaton)::Bool
         end
         current_node = potentials[1].destination
     end
-    any(arc -> arc.pattern == patterns[end] && arc.destination == machine.final, next(machine, current_node))
+    any(arc -> arc.pattern == patterns[end] && in(arc.destination, machine.finals), next(machine, current_node))
 end
 
 """
@@ -59,7 +59,7 @@ Returns:
 function generate(machine::FSAutomaton)::Vector{String}
     pattern::Vector{String} = []
     current_node = machine.starter
-    while current_node != machine.final
+    while !in(current_node, machine.finals)
         arc = next(machine, current_node)[1]
         push!(pattern, arc.pattern)
         current_node = arc.destination

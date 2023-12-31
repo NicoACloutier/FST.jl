@@ -12,7 +12,7 @@ A finite-state transducer.
 """
 struct FSTransducer
     starter::Int           # the first node
-    final::Int             # the final node
+    finals::Vector{Int}    # the final nodes
     arcs::Vector{TransArc} # connections between nodes
 end
 
