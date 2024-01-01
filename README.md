@@ -1,1 +1,1 @@
-"# FST.jl" 
+FST.jl: a lightweight finite-state machine module in pure Julia.
